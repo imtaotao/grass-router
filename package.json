@@ -1,0 +1,29 @@
+{
+  "name": "@rustle/grass-router",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/grass-router.common.js",
+  "module": "dist/grass-router.min.js",
+  "scripts": {
+    "watch": "node build.js -w",
+    "build": "node build.js"
+  },
+  "author": "imtaotao",
+  "keywords": [
+    "router",
+    "grass"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.18.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-cleanup": "^3.1.1",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "typescript": "^3.5.3"
+  }
+}
