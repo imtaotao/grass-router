@@ -56,18 +56,22 @@ async function build (cfg, sourcemap = false) {
 
 // delete old build files
 rm('./dist')
-build(esm)
-build(cjs)
-build(umd)
+
+const buildVersion = sourcemap => {
+  build(esm, sourcemap)
+  build(cjs, sourcemap)
+  build(umd, sourcemap)
+}
 
 // watch, use in dev and test
 if (process.argv.includes('-w')) {
   let i = 0
   fs.watch('./src', () => {
-    build(esm, true)
-    build(cjs, true)
-    build(umd, true)
+    buildVersion(true)
     console.clear()
     console.log('Rebuild times: ' + ++i)
   })
+  buildVersion(true)
+} else {
+  buildVersion()
 }
