@@ -21,7 +21,7 @@ export default function createBrowserHistory (props: BrowserProps) : History {
 
   function createHref () {}
 
-  function push (path: string | Object, state?: Object) {
+  function push (path: string | any, state?: Object) {
     // 对参数进行断言，给出相应的警告
     assertParams(path, state)
 

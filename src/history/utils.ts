@@ -6,7 +6,7 @@ export function warning (condition: any, message: string): void {
   }
 }
 
-export function assertParams (path: string | Object, state?: Object) {
+export function assertParams (path: string | any, state?: Object) {
   warning(
     !(
       typeof path === 'object' &&
