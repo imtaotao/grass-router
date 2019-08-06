@@ -67,9 +67,9 @@ const buildVersion = sourcemap => {
 if (process.argv.includes('-w')) {
   let i = 0
   fs.watch('./src', () => {
-    buildVersion(true)
     console.clear()
     console.log('Rebuild times: ' + ++i)
+    buildVersion(true)
   })
   buildVersion(true)
 } else {
