@@ -1,1 +1,1 @@
-export * from './browser-history'
+export { createBrowserHistory } from './browser-history'

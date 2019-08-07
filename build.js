@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const rollup = require('rollup')
 const rm = require('rimraf').sync
 const babel = require('rollup-plugin-babel')
@@ -7,32 +8,35 @@ const cleanup = require('rollup-plugin-cleanup')
 const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
 
+const entryPath = path.resolve(__dirname, 'src/index.ts')
+const outputPath = filename => path.resolve(__dirname, './dist', filename)
+
 const esm = {
-  input: 'src/index.ts',
+  input: entryPath,
   output: {
-    file: 'dist/grass-router.esm.js',
+    file: outputPath('grass-router.esm.js'),
     format: 'es',
   }
 }
 
 const umd = {
-  input: 'src/index.ts',
+  input: entryPath,
   output: {
-    file: 'dist/grass-router.min.js',
+    file: outputPath('grass-router.min.js'),
     format: 'umd',
     name: 'GrassRouter',
   }
 }
 
 const cjs = {
-  input: 'src/index.ts',
+  input: entryPath,
   output: {
-    file: 'dist/grass-router.common.js',
+    file: outputPath('grass-router.common.js'),
     format: 'cjs',
   }
 }
 
-async function build (cfg, sourcemap = false) {
+async function build (cfg, type, sourcemap = false) {
   cfg.output.sourcemap = sourcemap
 
   const bundle = await rollup.rollup({
@@ -46,6 +50,8 @@ async function build (cfg, sourcemap = false) {
       }),
       typescript({
         tsconfig: 'tsconfig.json',
+        typescript: require('typescript'),
+        cacheRoot: path.resolve(__dirname, `.cache_${type}`),
       }),
       cmd(),
     ]
@@ -58,9 +64,9 @@ async function build (cfg, sourcemap = false) {
 rm('./dist')
 
 const buildVersion = sourcemap => {
-  build(esm, sourcemap)
-  build(cjs, sourcemap)
-  build(umd, sourcemap)
+  build(esm, 'esm', sourcemap)
+  build(cjs, 'cjs', sourcemap)
+  build(umd, 'umd', sourcemap)
 }
 
 // watch, use in dev and test
@@ -73,5 +79,6 @@ if (process.argv.includes('-w')) {
   })
   buildVersion(true)
 } else {
+  console.clear()
   buildVersion()
 }

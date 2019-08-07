@@ -16,7 +16,7 @@ export interface History {
   go: (n: number) => void
 }
 
-export default function createBrowserHistory (props: BrowserProps) : History {
+export function createBrowserHistory (props: BrowserProps) : History {
   const globalHistory = window.history
 
   function createHref () {}

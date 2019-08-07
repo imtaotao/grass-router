@@ -1,4 +1,6 @@
-type ConfirmFunction = (message: any, callback: Function) => boolean
+export type Fun = (...args: any) => any
+
+export type ConfirmFunction = (message: any, callback: Fun) => ReturnType<typeof callback>
 
 export interface BrowserProps {
   basename: string
