@@ -1,10 +1,11 @@
 {
   "name": "@rustle/grass-router",
   "version": "0.0.0",
-  "description": "",
+  "description": "Grass router",
   "main": "dist/grass-router.common.js",
   "module": "dist/grass-router.min.js",
   "scripts": {
+    "dev": "http-server ./ -o",
     "watch": "node build.js -w",
     "build": "node build.js"
   },

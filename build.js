@@ -60,6 +60,7 @@ async function build (cfg, type, sourcemap = false) {
   await bundle.write(cfg.output)
 }
 
+console.clear()
 // delete old build files
 rm('./dist')
 
@@ -79,6 +80,5 @@ if (process.argv.includes('-w')) {
   })
   buildVersion(true)
 } else {
-  console.clear()
   buildVersion()
 }
