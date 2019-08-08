@@ -1,4 +1,4 @@
-import { BrowserProps } from './props.type';
+import { BrowserProps } from './type';
 declare type Action = 'POP' | 'PUSH' | 'REPLACE';
 export interface History {
     readonly length: number;

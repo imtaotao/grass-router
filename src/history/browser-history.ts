@@ -1,5 +1,5 @@
+import { BrowserProps } from './type'
 import { warning, assertParams } from './utils'
-import { BrowserProps } from './props.type'
 
 type Action = 'POP' | 'PUSH' | 'REPLACE'
 

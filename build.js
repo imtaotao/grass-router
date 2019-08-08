@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 const rollup = require('rollup')
 const rm = require('rimraf').sync
@@ -7,6 +6,7 @@ const cmd = require('rollup-plugin-commonjs')
 const cleanup = require('rollup-plugin-cleanup')
 const resolve = require('rollup-plugin-node-resolve')
 const typescript = require('rollup-plugin-typescript2')
+const watch = require('node-watch')
 
 const entryPath = path.resolve(__dirname, 'src/index.ts')
 const outputPath = filename => path.resolve(__dirname, './dist', filename)
@@ -73,7 +73,7 @@ const buildVersion = sourcemap => {
 // watch, use in dev and test
 if (process.argv.includes('-w')) {
   let i = 0
-  fs.watch('./src', () => {
+  watch('./src', { recursive: true }, () => {
     console.clear()
     console.log('Rebuild times: ' + ++i)
     buildVersion(true)

@@ -1,3 +1,5 @@
+export * from './path'
+
 export function warning (condition: any, message: string): void {
   if (condition) return
   if (typeof console !== 'undefined') {

@@ -18,7 +18,7 @@ const unlisten = history.listen((location, action) => {
 });
 
 // Use push, replace, and go to navigate around.
-history.push('/home', { some: 'state' });
+history.push('/home#aa?a=12', { some: 'state' });
 
 // To stop listening, call the function returned from listen().
 unlisten();
