@@ -117,6 +117,27 @@ function assertParams(path, state) {
         state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' +
         'argument is a location-like object that already has state; it is ignored');
 }
+function valueEqual(a, b) {
+    if (a === b)
+        return true;
+    if (a == null || b == null)
+        return false;
+    if (Array.isArray(a)) {
+        if (!Array.isArray(b) || a.length !== b.length)
+            return false;
+        return a.every(function (item, i) { return valueEqual(item, b[i]); });
+    }
+    if (typeof a === 'object' || typeof b === 'object') {
+        var aVal = a.valueOf ? a.valueOf() : Object.prototype.valueOf.call(a);
+        var bVal = b.valueOf ? b.valueOf() : Object.prototype.valueOf.call(b);
+        if (aVal !== a || bVal !== b) {
+            return valueEqual(aVal, bVal);
+        }
+        var keys = Object.keys(Object.assign({}, a, b));
+        return keys.every(function (key) { return valueEqual(a[key], b[key]); });
+    }
+    return false;
+}
 
 function createBrowserHistory(props) {
     var globalHistory = window.history;
@@ -151,6 +172,7 @@ var history = /*#__PURE__*/Object.freeze({
   createBrowserHistory: createBrowserHistory,
   warning: warning,
   assertParams: assertParams,
+  valueEqual: valueEqual,
   isAbsolute: isAbsolute,
   spliceOne: spliceOne,
   parsePath: parsePath,
