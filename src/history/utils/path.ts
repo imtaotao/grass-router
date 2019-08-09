@@ -1,4 +1,4 @@
-import * as I from '../type'
+import { Location } from '../type'
 
 export function isAbsolute (path: string) {
   return path.charAt(0) === '/'
@@ -40,7 +40,7 @@ export function parsePath (path: string) {
   return { hash, search, pathname  }
 }
 
-export function createPath (location: I.Location) {
+export function createPath (location: Location) {
   const { hash, search, pathname } = location
   let path = pathname || '/'
 

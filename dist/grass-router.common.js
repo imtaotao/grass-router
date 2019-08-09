@@ -103,6 +103,31 @@ function resolvePathname(to, from) {
         : result;
 }
 
+var canUseDOM = !!(typeof window !== 'undefined' &&
+    window.document &&
+    window.document.createElement);
+function getConfirmation(message, callback) {
+    callback(window.confirm(message));
+}
+function supportsHistory() {
+    var ua = window.navigator.userAgent;
+    if ((ua.indexOf('Android 2.') !== -1 || ua.indexOf('Android 4.0') !== -1) &&
+        ua.indexOf('Mobile Safari') !== -1 &&
+        ua.indexOf('Chrome') === -1 &&
+        ua.indexOf('Windows Phone') === -1)
+        return false;
+    return window.history && 'pushState' in window.history;
+}
+function supportsPopStateOnHashChange() {
+    return window.navigator.userAgent.indexOf('Trident') === -1;
+}
+function supportsGoWithoutReloadUsingHash() {
+    return window.navigator.userAgent.indexOf('Firefox') === -1;
+}
+function isExtraneousPopstateEvent(event) {
+    return event.state === undefined && navigator.userAgent.indexOf('CriOS') === -1;
+}
+
 function warning(condition, message) {
     if (condition)
         return;
@@ -137,6 +162,50 @@ function valueEqual(a, b) {
         return keys.every(function (key) { return valueEqual(a[key], b[key]); });
     }
     return false;
+}
+function locationsAreEqual(a, b) {
+    return (a.key === b.key &&
+        a.hash === b.hash &&
+        a.search === b.search &&
+        a.pathname === b.pathname &&
+        valueEqual(a.state, b.search));
+}
+function createLocation(path, state, key, currrentLocation) {
+    var location;
+    if (typeof path === 'string') {
+        location = parsePath(path);
+        location.state = state;
+    }
+    else {
+        location = Object.assign({}, path);
+        location.pathname = location.pathname || '';
+        var completion = function (key) {
+            var prefix = key === 'search' ? '?' : '#';
+            if (location[key]) {
+                if (location[key].charAt(0) !== prefix)
+                    location[key] = prefix + location[key];
+            }
+            else {
+                location[key] = prefix;
+            }
+        };
+        completion('hash');
+        completion('search');
+    }
+    if (key)
+        location.key = key;
+    if (currrentLocation) {
+        if (!location.pathname) {
+            location.pathname = currrentLocation.pathname;
+        }
+        else if (!isAbsolute(location.pathname)) {
+            location.pathname = resolvePathname(location.pathname, currrentLocation.pathname);
+        }
+    }
+    else {
+        location.pathname = location.pathname || '/';
+    }
+    return location;
 }
 
 function createBrowserHistory(props) {
@@ -173,6 +242,14 @@ var history = /*#__PURE__*/Object.freeze({
   warning: warning,
   assertParams: assertParams,
   valueEqual: valueEqual,
+  locationsAreEqual: locationsAreEqual,
+  createLocation: createLocation,
+  canUseDOM: canUseDOM,
+  getConfirmation: getConfirmation,
+  supportsHistory: supportsHistory,
+  supportsPopStateOnHashChange: supportsPopStateOnHashChange,
+  supportsGoWithoutReloadUsingHash: supportsGoWithoutReloadUsingHash,
+  isExtraneousPopstateEvent: isExtraneousPopstateEvent,
   isAbsolute: isAbsolute,
   spliceOne: spliceOne,
   parsePath: parsePath,
@@ -185,4 +262,4 @@ var index = {
 };
 
 module.exports = index;
-//# sourceMappingURL=grass-router.common.js.map
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ3Jhc3Mtcm91dGVyLmNvbW1vbi5qcyIsInNvdXJjZXMiOltdLCJzb3VyY2VzQ29udGVudCI6W10sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7In0=

@@ -11,7 +11,7 @@ export interface BrowserProps {
 
 export interface Location {
   state: any
-  key: string
+  key?: string
   hash: string
   search: string
   pathname: string

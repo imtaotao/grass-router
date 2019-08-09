@@ -1,9 +1,13 @@
+import { Location } from '../type'
+import { parsePath, isAbsolute, resolvePathname } from './path'
+
+export * from './dom'
 export * from './path'
 
-export function warning (condition: any, message: string): void {
+export function warning (condition: any, message: string) {
   if (condition) return
   if (typeof console !== 'undefined') {
-    const text: string = `Warning: ${message}`
+    const text = `Warning: ${message}`
     console.warn(text)
   }
 }
@@ -45,4 +49,61 @@ export function valueEqual (a: any, b: any) : boolean {
   }
 
   return false
+}
+
+// 检查俩 location 是否是一样的
+export function locationsAreEqual (a: Location, b: Location) {
+  return (
+      a.key === b.key &&
+      a.hash === b.hash &&
+      a.search === b.search &&
+      a.pathname === b.pathname &&
+      valueEqual(a.state, b.search)
+  )
+}
+
+export function createLocation (
+    path: string | Location,
+    state: any,
+    key: string,
+    currrentLocation: Location,
+) {
+  let location: Location
+
+  if (typeof path === 'string') {
+    location = <any>parsePath(path)
+    location.state = state
+  } else {
+    // push(location) 这种情况
+    location = Object.assign({}, path)
+    location.pathname = location.pathname || ''
+
+    const completion = (key: 'search' | 'hash') => {
+      const prefix = key === 'search' ? '?' : '#'
+      if (location[key]) {
+        if (location[key].charAt(0) !== prefix)
+        location[key] = prefix + location[key]
+      } else {
+        location[key] = prefix
+      }
+    }
+
+    // 补全 hash 和 search
+    completion('hash')
+    completion('search')
+  }
+
+  if (key) location.key = key
+
+  if (currrentLocation) {
+    if (!location.pathname) {
+      location.pathname = currrentLocation.pathname
+    } else if (!isAbsolute(location.pathname)) {
+      location.pathname = resolvePathname(location.pathname, currrentLocation.pathname)
+    }
+  } else {
+    location.pathname = location.pathname || '/'
+  }
+
+  return location
 }

@@ -37,7 +37,7 @@ const cjs = {
 }
 
 async function build (cfg, type, sourcemap = false) {
-  cfg.output.sourcemap = sourcemap
+  cfg.output.sourcemap = sourcemap ? 'inline' : false
 
   const bundle = await rollup.rollup({
     input: cfg.input,
