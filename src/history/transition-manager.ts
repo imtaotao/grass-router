@@ -24,9 +24,9 @@ export default function () {
       location: Location,
       action: Action,
       getUserConfirmation: ConfirmFunction,
-      callback: (ok: boolean) => never,
+      callback: (ok: boolean) => void,
   ) {
-    // 如果没有锁住
+    // 如果没有锁的存在
     if (prompt != null) {
       const result = typeof prompt === 'function' ? prompt(location, action) : prompt
 

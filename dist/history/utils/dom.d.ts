@@ -1,5 +1,5 @@
 export declare const canUseDOM: boolean;
-export declare function getConfirmation(message: any, callback: (ok: boolean) => never): void;
+export declare function getConfirmation(message: string, callback: (ok: boolean) => never): void;
 export declare function supportsHistory(): boolean;
 export declare function supportsPopStateOnHashChange(): boolean;
 export declare function supportsGoWithoutReloadUsingHash(): boolean;

@@ -5,7 +5,7 @@ export const canUseDOM = !!(
   window.document.createElement
 )
 
-export function getConfirmation (message: any, callback: (ok: boolean) => never) {
+export function getConfirmation (message: string, callback: (ok: boolean) => never) {
   callback(window.confirm(message))
 }
 

@@ -4,4 +4,4 @@
 const { history } = require('@router')
 const h = history.createBrowserHistory()
 
-console.log(h.push())
+console.log(h.push('/home?tt=121', {tt: 11}))
