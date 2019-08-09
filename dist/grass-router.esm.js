@@ -1,6 +1,22 @@
 function isAbsolute(path) {
     return path.charAt(0) === '/';
 }
+function addLeadingSlash(path) {
+    return path.charAt(0) === '/' ? path : '/' + path;
+}
+function stripLeadingSlash(path) {
+    return path.charAt(0) === '/' ? path.charAt(path.length - 1) : path;
+}
+function hasBasename(path, prefix) {
+    return (path.toLowerCase().indexOf(prefix.toLowerCase()) === 0 &&
+        '/?#'.indexOf(path.charAt(prefix.length)) !== -1);
+}
+function stripBasename(path, prefix) {
+    return hasBasename(path, prefix) ? path.substring(prefix.length) : path;
+}
+function stripTrailingSlash(path) {
+    return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path;
+}
 function spliceOne(list, index) {
     var i = index;
     var k = i + 1;
@@ -134,6 +150,9 @@ function warning(condition, message) {
         console.warn(text);
     }
 }
+function createKey(l) {
+    return Math.random().toString(36).substring(2, l);
+}
 function assertParams(path, state) {
     warning(!(typeof path === 'object' &&
         path.state !== undefined &&
@@ -177,14 +196,14 @@ function createLocation(path, state, key, currrentLocation) {
     else {
         location = Object.assign({}, path);
         location.pathname = location.pathname || '';
-        var completion = function (key) {
-            var prefix = key === 'search' ? '?' : '#';
-            if (location[key]) {
-                if (location[key].charAt(0) !== prefix)
-                    location[key] = prefix + location[key];
+        var completion = function (keyword) {
+            var prefix = keyword === 'search' ? '?' : '#';
+            if (location[keyword]) {
+                if (location[keyword].charAt(0) !== prefix)
+                    location[keyword] = prefix + location[keyword];
             }
             else {
-                location[key] = prefix;
+                location[keyword] = prefix;
             }
         };
         completion('hash');
@@ -206,11 +225,43 @@ function createLocation(path, state, key, currrentLocation) {
     return location;
 }
 
+var getHistoryState = function () {
+    try {
+        return window.history.state || {};
+    }
+    catch (err) {
+        return {};
+    }
+};
 function createBrowserHistory(props) {
+    if (props === void 0) { props = {}; }
+    if (!canUseDOM)
+        throw new Error('Browser history needs a DOM');
     var globalHistory = window.history;
-    function createHref() { }
+    var canUseHistory = supportsHistory();
+    var initialLocation = getDOMLocation(getHistoryState());
+    var needsHashChangeListener = !supportsPopStateOnHashChange();
+    var allKeys = [initialLocation.key];
+    var basename = props.basename
+        ? stripTrailingSlash(addLeadingSlash(props.basename))
+        : '';
+    var _a = props.keyLength, keyLength = _a === void 0 ? 6 : _a, _b = props.forceRefresh, _c = props.getUserConfirmation;
+    function createHref(location) {
+        return basename + createPath(location);
+    }
+    function getDOMLocation(historyState) {
+        if (historyState === void 0) { historyState = {}; }
+        var key = historyState.key, state = historyState.state;
+        var _a = window.location, pathname = _a.pathname, search = _a.search, hash = _a.hash;
+        var path = pathname + search + hash;
+        warning(!basename || hasBasename(path, basename), '你不应该包含 basename 前缀的 url');
+        if (basename)
+            path = stripBasename(path, basename);
+        return createLocation(path, state, key);
+    }
     function push(path, state) {
         assertParams(path, state);
+        var location = createLocation(path, state, createKey(keyLength), history.location);
     }
     function replace() { }
     function go(n) { }
@@ -228,6 +279,7 @@ function createBrowserHistory(props) {
         goForward: goForward,
         createHref: createHref,
         action: 'POP',
+        location: initialLocation,
         length: globalHistory.length,
     };
     return history;
@@ -238,6 +290,7 @@ function createBrowserHistory(props) {
 var history = /*#__PURE__*/Object.freeze({
   createBrowserHistory: createBrowserHistory,
   warning: warning,
+  createKey: createKey,
   assertParams: assertParams,
   valueEqual: valueEqual,
   locationsAreEqual: locationsAreEqual,
@@ -249,6 +302,11 @@ var history = /*#__PURE__*/Object.freeze({
   supportsGoWithoutReloadUsingHash: supportsGoWithoutReloadUsingHash,
   isExtraneousPopstateEvent: isExtraneousPopstateEvent,
   isAbsolute: isAbsolute,
+  addLeadingSlash: addLeadingSlash,
+  stripLeadingSlash: stripLeadingSlash,
+  hasBasename: hasBasename,
+  stripBasename: stripBasename,
+  stripTrailingSlash: stripTrailingSlash,
   spliceOne: spliceOne,
   parsePath: parsePath,
   createPath: createPath,
@@ -260,4 +318,4 @@ var index = {
 };
 
 export default index;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ3Jhc3Mtcm91dGVyLmVzbS5qcyIsInNvdXJjZXMiOltdLCJzb3VyY2VzQ29udGVudCI6W10sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OyJ9
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ3Jhc3Mtcm91dGVyLmVzbS5qcyIsInNvdXJjZXMiOltdLCJzb3VyY2VzQ29udGVudCI6W10sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OzsifQ==

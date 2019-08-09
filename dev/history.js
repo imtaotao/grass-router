@@ -404,7 +404,7 @@
         _props$keyLength = _props.keyLength,
         keyLength = _props$keyLength === void 0 ? 6 : _props$keyLength;
     var basename = props.basename ? stripTrailingSlash(addLeadingSlash(props.basename)) : '';
-
+   
     function getDOMLocation(historyState) {
       var _ref = historyState || {},
           key = _ref.key,
@@ -492,6 +492,7 @@
       warning(!(typeof path === 'object' && path.state !== undefined && state !== undefined), 'You should avoid providing a 2nd state argument to push when the 1st ' + 'argument is a location-like object that already has state; it is ignored');
       var action = 'PUSH';
       var location = createLocation(path, state, createKey(), history.location);
+
       transitionManager.confirmTransitionTo(location, action, getUserConfirmation, function (ok) {
         if (!ok) return;
         var href = createHref(location);

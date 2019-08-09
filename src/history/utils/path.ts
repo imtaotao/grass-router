@@ -4,6 +4,30 @@ export function isAbsolute (path: string) {
   return path.charAt(0) === '/'
 }
 
+export function addLeadingSlash (path: string) {
+  return path.charAt(0) === '/' ? path : '/' + path
+}
+
+export function stripLeadingSlash (path: string) {
+  return path.charAt(0) === '/' ? path.charAt(path.length - 1) : path
+}
+
+// a/b/c -> a   a?b=c -> a  a#fa -> a
+export function hasBasename (path: string, prefix: string) {
+  return (
+      path.toLowerCase().indexOf(prefix.toLowerCase()) === 0 &&
+      '/?#'.indexOf(path.charAt(prefix.length)) !== -1
+  )
+}
+
+export function stripBasename (path: string, prefix: string) {
+  return hasBasename(path, prefix) ? path.substring(prefix.length) : path
+}
+
+export function stripTrailingSlash(path: string) {
+  return path.charAt(path.length - 1) === '/' ? path.slice(0, -1) : path
+}
+
 // 比俩参数的 array.splice 快 1.5 倍
 export function spliceOne (list: Array<any>, index: number) {
   let i = index

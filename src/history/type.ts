@@ -1,18 +1,24 @@
-export type Fn = (...args: any) => any
+export type ConfirmFunction = (message: string, callback: (ok: boolean) => never) => ReturnType<typeof callback>
 
-export type ConfirmFunction = (message: any, callback: Fn) => ReturnType<typeof callback>
+
+export type Action = 'POP' | 'PUSH' | 'REPLACE'
 
 export interface BrowserProps {
-  basename: string
-  keyLength: number
-  forceRefresh: boolean
-  getUserConfirmation: ConfirmFunction
+  basename?: string
+  keyLength?: number
+  forceRefresh?: boolean
+  getUserConfirmation?: ConfirmFunction
 }
 
 export interface Location {
-  state: any
   key?: string
   hash: string
+  state: any
   search: string
   pathname: string
+}
+
+export interface HistoryState {
+  key?: string
+  state?: any
 }

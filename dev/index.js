@@ -2,8 +2,6 @@
 // require.all(['./origin-history/browser'])
 
 const { history } = require('@router')
-const resolvePathname = history.resolvePathname
+const h = history.createBrowserHistory()
 
-const res = resolvePathname( '/one', 'http://example.com/one')
-
-console.log(res)
+console.log(h.push())

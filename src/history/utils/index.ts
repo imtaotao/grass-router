@@ -12,6 +12,10 @@ export function warning (condition: any, message: string) {
   }
 }
 
+export function createKey (l: number) {
+  return Math.random().toString(36).substring(2, l)
+}
+
 export function assertParams (path: string | any, state?: Object) {
   warning(
     !(
@@ -63,10 +67,10 @@ export function locationsAreEqual (a: Location, b: Location) {
 }
 
 export function createLocation (
-    path: string | Location,
-    state: any,
-    key: string,
-    currrentLocation: Location,
+    path?: string | Location,
+    state?: any,
+    key?: string,
+    currrentLocation?: Location,
 ) {
   let location: Location
 
@@ -78,13 +82,13 @@ export function createLocation (
     location = Object.assign({}, path)
     location.pathname = location.pathname || ''
 
-    const completion = (key: 'search' | 'hash') => {
-      const prefix = key === 'search' ? '?' : '#'
-      if (location[key]) {
-        if (location[key].charAt(0) !== prefix)
-        location[key] = prefix + location[key]
+    const completion = (keyword: 'search' | 'hash') => {
+      const prefix = keyword === 'search' ? '?' : '#'
+      if (location[keyword]) {
+        if (location[keyword].charAt(0) !== prefix)
+        location[keyword] = prefix + location[keyword]
       } else {
-        location[key] = prefix
+        location[keyword] = prefix
       }
     }
 

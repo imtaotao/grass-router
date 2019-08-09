@@ -1,9 +1,9 @@
-import { BrowserProps } from './type';
-declare type Action = 'POP' | 'PUSH' | 'REPLACE';
+import { Action, Location, BrowserProps } from './type';
 export interface History {
     readonly length: number;
     readonly action: Action;
-    push: Function;
+    location: Location;
+    push: (path: string | any, state?: Object) => void;
     block: Function;
     goBack: Function;
     listen: Function;
@@ -12,5 +12,4 @@ export interface History {
     createHref: Function;
     go: (n: number) => void;
 }
-export declare function createBrowserHistory(props: BrowserProps): History;
-export {};
+export declare function createBrowserHistory(props?: BrowserProps): History;
